@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `--output list` format: plain `image:tag` per line for direct copy-paste into Zarf package `images:` blocks
+
 ## [0.1.0] - 2026-03-14
 
 ### Added

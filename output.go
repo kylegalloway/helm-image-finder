@@ -19,8 +19,10 @@ func writeOutput(format string, entries []ImageEntry, writer io.Writer) error {
 		return writeJSONOutput(entries, writer)
 	case "csv":
 		return writeCSVOutput(entries, writer)
+	case "list":
+		return writeListOutput(entries, writer)
 	default:
-		return fmt.Errorf("unknown output format %q: must be one of: table, json, csv", format)
+		return fmt.Errorf("unknown output format %q: must be one of: table, json, csv, list", format)
 	}
 }
 
@@ -59,6 +61,16 @@ func writeJSONOutput(entries []ImageEntry, writer io.Writer) error {
 	encoder := json.NewEncoder(writer)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(entries)
+}
+
+// writeListOutput renders image entries as a plain newline-separated list of
+// "image:tag" references, one per line. Intended for copy-paste into a Zarf
+// package images block or any other tool that wants a bare image list.
+func writeListOutput(entries []ImageEntry, writer io.Writer) error {
+	for _, entry := range entries {
+		fmt.Fprintf(writer, "%s:%s\n", entry.Image, entry.Tag)
+	}
+	return nil
 }
 
 // writeCSVOutput renders image entries as a CSV file with a header row.

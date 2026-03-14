@@ -55,7 +55,7 @@ func parseFlags() (Config, error) {
 
 	valuesFiles := flagSet.StringArrayP("values", "f", nil, "path to a values file; may be repeated")
 	setValues := flagSet.StringArray("set", nil, "override a chart value (helm --set syntax); may be repeated")
-	outputFormat := flagSet.StringP("output", "o", "table", "output format: table, json, csv")
+	outputFormat := flagSet.StringP("output", "o", "table", "output format: table, json, csv, list")
 	uniqueOnly := flagSet.BoolP("unique", "u", false, "only print unique image+tag combinations (first occurrence wins)")
 	namespace := flagSet.StringP("namespace", "n", "", "kubernetes namespace to pass to helm template")
 
@@ -68,6 +68,7 @@ func parseFlags() (Config, error) {
 		fmt.Fprintf(os.Stderr, "  helm-image-finder my-release ./chart\n")
 		fmt.Fprintf(os.Stderr, "  helm-image-finder my-release ./chart -f prod.yaml --set image.tag=1.2.3\n")
 		fmt.Fprintf(os.Stderr, "  helm-image-finder my-release ./chart --output json --unique\n")
+		fmt.Fprintf(os.Stderr, "  helm-image-finder my-release ./chart --output list --unique\n")
 		fmt.Fprintf(os.Stderr, "  helm-image-finder my-release oci://registry.io/org/chart --version 1.5.0\n")
 	}
 
@@ -81,7 +82,7 @@ func parseFlags() (Config, error) {
 		return Config{}, fmt.Errorf("release name and chart are required")
 	}
 
-	validOutputFormats := map[string]bool{"table": true, "json": true, "csv": true}
+	validOutputFormats := map[string]bool{"table": true, "json": true, "csv": true, "list": true}
 	if !validOutputFormats[*outputFormat] {
 		return Config{}, fmt.Errorf("unknown output format %q: must be one of: table, json, csv", *outputFormat)
 	}
