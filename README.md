@@ -33,7 +33,7 @@ Flags can appear before or after the positional arguments.
 
 | Flag | Short | Default | Description |
 |---|---|---|---|
-| `--output` | `-o` | `table` | Output format: `table`, `json`, `csv` |
+| `--output` | `-o` | `table` | Output format: `table`, `json`, `csv`, `list` |
 | `--unique` | `-u` | false | Only show unique image+tag combinations (first occurrence wins) |
 | `--values` | `-f` | — | Path to a values file; may be repeated |
 | `--set` | — | — | Override a chart value (helm `--set` syntax); may be repeated |
@@ -117,6 +117,21 @@ helm-image-finder my-release ./my-chart --output json
 ]
 ```
 
+### List output (Zarf / air-gapped)
+
+Plain `image:tag` per line — ready to paste directly into a [Zarf](https://zarf.dev/) package `images:` block or any tool that wants a bare image list.
+
+```bash
+helm-image-finder my-release ./my-chart --output list --unique
+```
+
+```
+myregistry.io/my-app:v1.2.3
+prom/prometheus:v2.45.0
+postgres:15.2
+busybox:1.36
+```
+
 ### CSV output
 
 ```bash
@@ -160,5 +175,5 @@ helm-image-finder/
 ├── main.go      — Config struct, flag parsing, main orchestration
 ├── helm.go      — shells out to helm template
 ├── extract.go   — YAML node walking, image extraction, deduplication
-└── output.go    — table, JSON, and CSV formatters
+└── output.go    — table, JSON, CSV, and list formatters
 ```
