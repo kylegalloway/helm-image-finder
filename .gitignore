@@ -1,1 +1,4 @@
 helm-image-finder
+
+# Agent skill configuration (local to this machine)
+docs/agents/
